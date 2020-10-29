@@ -1,7 +1,9 @@
 import io from 'socket.io-client';
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
+import {baseUrl} from './Base';
 import {
     Line,
     LineChart,
@@ -18,13 +20,23 @@ const socket = io('http://localhost:1342', {
 
 const Home = () => {
     const [data, setData] = useState([]);
-    const { register, handleSubmit, errors } = useForm();
-    const [amount, setAmount] = useState('');
-    const onSubmit = number => {
-        console.log(number);
-        setAmount(number)
-    }
-    console.log(amount);
+    //const { register, handleSubmit, errors } = useForm();
+    // const [amount, setAmount] = useState('');
+    const [balance, setBalance] = useState('');
+
+    useEffect(() => {
+        fetch(baseUrl())
+            .then(res => res.json())
+            .then(res => {
+                console.log(res.data[0])
+                setBalance(res.data[0])
+            });
+    },[]);
+
+    // const onSubmit = number => {
+    //     console.log(number);
+    //     setAmount(number)
+    // }
     //skicka data till databasen
     //set data = ""
 
@@ -57,15 +69,34 @@ const Home = () => {
                 <p>Current price is: {data.slice(-1).map((obj) => {
                     return obj.value.toFixed(2)
                 })}</p>
-                <p>How many units do you wish to purchase?</p>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <label htmlFor="name">Amount</label>
-                    <input type="text" id="name" name="amount" ref={register({ required: true, maxLength: 7 })} />
-                    {errors.name && errors.name.type === "required" && <span>This is required</span>}
-                    {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span> }
-                    <input type="submit" />
-                </form>
-                <p>You want to buy {amount.amount} at a price of </p>
+                {/*Get this from db*/}
+                <p>Your balance is: {balance} </p>
+                {/*Post this to db*/}
+                <p>Add money to your account</p>
+                <p>Withdraw money from you account</p>
+                <p>Purchase units</p>
+                <p>Sell units</p>
+                <p>Updated balance: </p>
+                <Link to={`Purchases`}>Buy</Link>
+                <Link to={`Sales`}>Sell</Link>
+                <Link to={`Deposits`}>Deposit</Link>
+                <Link to={`Withdrawals`}>Withdraw</Link>
+
+
+
+                {/*<p>How many units do you wish to purchase?</p>*/}
+                {/*<form onSubmit={handleSubmit(onSubmit)}>*/}
+                {/*    <label htmlFor="name">Amount</label>*/}
+                {/*    <input type="text" id="name" name="amount" ref={register({ required: true, maxLength: 7 })} />*/}
+                {/*    {errors.name && errors.name.type === "required" && <span>This is required</span>}*/}
+                {/*    {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span> }*/}
+                {/*    <input type="submit" />*/}
+                {/*</form>*/}
+                {/*<p>You want to buy {amount.amount} at a price of {data.slice(-1).map((obj) => {*/}
+                {/*    return obj.value.toFixed(2)*/}
+                {/*})} at a total price of { amount.amount * data.slice(-1).map((obj) => {*/}
+                {/*    return obj.value.toFixed(2)*/}
+                {/*})}</p>*/}
             </div>
         </main>
     );

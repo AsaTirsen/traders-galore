@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../traders-galore">
+      <excludeFolder url="file://$MODULE_DIR$/../traders-galore/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../traders-galore/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../traders-galore/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/../traders-galore/tmp" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
