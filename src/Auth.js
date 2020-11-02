@@ -27,9 +27,13 @@ export class Authenticate extends Component {
         event.preventDefault();
         const data = this.state.data;
         console.log(data)
+        console.log(baseUrl() + "login");
         fetch(baseUrl() + "login", {
             method: 'POST',
             body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
         }).then(res => res.json()).then(res => {
             console.log(res);
             if (!res.data) {
@@ -38,6 +42,7 @@ export class Authenticate extends Component {
             } else {
                 if(res.data.token) {
                     localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('userID', res.data.id)
                 }
             }
         });

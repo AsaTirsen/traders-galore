@@ -14,7 +14,9 @@ import {
 const socket = io('http://localhost:1342', {
     transports: ['websocket', 'polling']
 });
-
+const loggedIn = localStorage.getItem('token');
+const loggedInUser = localStorage.getItem('userID');
+console.log(loggedInUser)
 
 
 
@@ -22,15 +24,18 @@ const Home = () => {
     const [data, setData] = useState([]);
     //const { register, handleSubmit, errors } = useForm();
     // const [amount, setAmount] = useState('');
-    const [balance, setBalance] = useState('');
+    // const [balance, setBalance] = useState('');
+    const [user, setUser] = useState("");
 
     useEffect(() => {
-        fetch(baseUrl())
-            .then(res => res.json())
-            .then(res => {
-                console.log(res.data[0])
-                setBalance(res.data[0])
-            });
+        if (loggedIn) {
+            fetch(baseUrl() + `login/${loggedInUser}`)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res.data[0])
+                    setUser(res.data)
+                });
+        }
     },[]);
 
     // const onSubmit = number => {
@@ -69,14 +74,11 @@ const Home = () => {
                 <p>Current price is: {data.slice(-1).map((obj) => {
                     return obj.value.toFixed(2)
                 })}</p>
-                {/*Get this from db*/}
-                <p>Your balance is: {balance} </p>
-                {/*Post this to db*/}
-                <p>Add money to your account</p>
-                <p>Withdraw money from you account</p>
-                <p>Purchase units</p>
-                <p>Sell units</p>
-                <p>Updated balance: </p>
+                {/*If loggedIn*/}
+                {loggedIn && <>
+                    <p>Hello {user}</p>
+                    {/*<p>Your balance is: {balance} </p>*/}
+                </>}
                 <Link to={`Purchases`}>Buy</Link>
                 <Link to={`Sales`}>Sell</Link>
                 <Link to={`Deposits`}>Deposit</Link>
