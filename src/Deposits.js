@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {baseUrl} from "./Base";
+const loggedInUser = localStorage.getItem('id');
 
 export class Deposit extends Component {
     constructor(props) {
@@ -7,6 +8,7 @@ export class Deposit extends Component {
 
         this.state = {
             data: {
+                userid: loggedInUser,
                 type: 'Deposit',
                 amount:'',
             },
@@ -28,9 +30,10 @@ export class Deposit extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const data = this.state.data;
+        console.log(data.userid)
         console.log(data.type)
         console.log(data.amount)
-        fetch( baseUrl() + 'transactions', {
+        fetch( baseUrl() + `deposit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

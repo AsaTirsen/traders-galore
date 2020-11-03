@@ -42,7 +42,7 @@ export class Authenticate extends Component {
             } else {
                 if(res.data.token) {
                     localStorage.setItem('token', res.data.token);
-                    localStorage.setItem('userID', res.data.id)
+                    localStorage.setItem('id', res.data.user.id)
                 }
             }
         });

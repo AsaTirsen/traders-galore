@@ -11,11 +11,8 @@ import {
     YAxis,
 } from 'recharts';
 
-const socket = io('http://localhost:1342', {
-    transports: ['websocket', 'polling']
-});
 const loggedIn = localStorage.getItem('token');
-const loggedInUser = localStorage.getItem('userID');
+const loggedInUser = localStorage.getItem('id');
 console.log(loggedInUser)
 
 
@@ -24,7 +21,7 @@ const Home = () => {
     const [data, setData] = useState([]);
     //const { register, handleSubmit, errors } = useForm();
     // const [amount, setAmount] = useState('');
-    // const [balance, setBalance] = useState('');
+    const [balance, setBalance] = useState('');
     const [user, setUser] = useState("");
 
     useEffect(() => {
@@ -33,25 +30,38 @@ const Home = () => {
                 .then(res => res.json())
                 .then(res => {
                     console.log(res.data[0])
-                    setUser(res.data)
+                    setUser(res.data[0].email)
                 });
         }
     },[]);
 
-    // const onSubmit = number => {
-    //     console.log(number);
-    //     setAmount(number)
-    // }
-    //skicka data till databasen
-    //set data = ""
+    useEffect(() => {
+        if (loggedIn) {
+            fetch(baseUrl() + `${loggedInUser}`)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res.data[0])
+                    setBalance(res.data[0].cash_balance)
+                });
+        }
+    },[]);
+
 
     // 1. listen for a price change event and update the state
     useEffect(() => {
+        const socket = io('http://localhost:1342', {
+            transports: ['websocket', 'polling']
+        });
         socket.on('stocks', grannySmith => {
             console.log(grannySmith)
             setData(currentData => [...currentData, grannySmith]);
         });
+        return () => {
+            socket.close();
+        };
     }, []);
+
+    console.log(data);
 
     return (
         <main>
@@ -72,12 +82,10 @@ const Home = () => {
             <div>
                 <h1>Purchase Granny Smith stock</h1>
                 <p>Current price is: {data.slice(-1).map((obj) => {
-                    return obj.value.toFixed(2)
-                })}</p>
-                {/*If loggedIn*/}
+                    return obj.value.toFixed(2)})}</p>
                 {loggedIn && <>
                     <p>Hello {user}</p>
-                    {/*<p>Your balance is: {balance} </p>*/}
+                    <p>Your balance is: {balance} </p>
                 </>}
                 <Link to={`Purchases`}>Buy</Link>
                 <Link to={`Sales`}>Sell</Link>
