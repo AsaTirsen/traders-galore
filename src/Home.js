@@ -1,8 +1,8 @@
 import io from 'socket.io-client';
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link} from "react-router-dom";
 import {useEffect, useState} from 'react';
-// import { useForm } from "react-hook-form";
+import "./style/App.css"
 import {baseUrl} from './Base';
 import {
     Line,
@@ -10,12 +10,12 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+import { useMediaQuery } from 'react-responsive'
+
 
 const loggedIn = localStorage.getItem('token');
 const loggedInUser = localStorage.getItem('id');
 console.log(loggedInUser)
-
-
 
 const Home = () => {
     const [data, setData] = useState([]);
@@ -23,6 +23,8 @@ const Home = () => {
     // const [amount, setAmount] = useState('');
     const [balance, setBalance] = useState('');
     const [user, setUser] = useState("");
+    const isSmallerScreen = useMediaQuery({ query: '(max-width: 500px)' })
+    const isBiggerScreen = useMediaQuery({ query: '(min-width: 501px)' })
 
     useEffect(() => {
         if (loggedIn) {
@@ -33,7 +35,7 @@ const Home = () => {
                     setUser(res.data[0].email)
                 });
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (loggedIn) {
@@ -44,7 +46,7 @@ const Home = () => {
                     setBalance(res.data[0].cash_balance)
                 });
         }
-    },[]);
+    }, []);
 
 
     // 1. listen for a price change event and update the state
@@ -61,54 +63,46 @@ const Home = () => {
         };
     }, []);
 
-    console.log(data);
-
     return (
-        <main>
-            <article className='main'>
-                <h1>Trade here</h1>
-                <div className='textarea'>
-                    <p>Here is the price development for our apples</p>
-                </div>
-            </article>
+        <article className='main'>
+            <h1>Trade here</h1>
             <div>
-                <h1>Real Time pricechanges</h1>
+            </div>
+            <div className='main-content'>
+                <h2>Real Time pricechanges</h2>
+                {isBiggerScreen && <>
                 <LineChart width={500} height={300} data={data}>
                     <XAxis dataKey="time"/>
                     <YAxis/>
                     <Line dataKey="value"/>
                 </LineChart>
-            </div>
-            <div>
-                <h1>Purchase Granny Smith stock</h1>
-                <p>Current price is: {data.slice(-1).map((obj) => {
-                    return obj.value.toFixed(2)})}</p>
-                {loggedIn && <>
-                    <p>Hello {user}</p>
-                    <p>Your balance is: {balance} </p>
                 </>}
-                <Link to={`Purchases`}>Buy</Link>
-                <Link to={`Sales`}>Sell</Link>
-                <Link to={`Deposits`}>Deposit</Link>
-                <Link to={`Withdrawals`}>Withdraw</Link>
-
-
-
-                {/*<p>How many units do you wish to purchase?</p>*/}
-                {/*<form onSubmit={handleSubmit(onSubmit)}>*/}
-                {/*    <label htmlFor="name">Amount</label>*/}
-                {/*    <input type="text" id="name" name="amount" ref={register({ required: true, maxLength: 7 })} />*/}
-                {/*    {errors.name && errors.name.type === "required" && <span>This is required</span>}*/}
-                {/*    {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span> }*/}
-                {/*    <input type="submit" />*/}
-                {/*</form>*/}
-                {/*<p>You want to buy {amount.amount} at a price of {data.slice(-1).map((obj) => {*/}
-                {/*    return obj.value.toFixed(2)*/}
-                {/*})} at a total price of { amount.amount * data.slice(-1).map((obj) => {*/}
-                {/*    return obj.value.toFixed(2)*/}
-                {/*})}</p>*/}
+                {isSmallerScreen && <>
+                    <LineChart width={300} height={200} data={data}>
+                        <XAxis dataKey="time"/>
+                        <YAxis/>
+                        <Line dataKey="value"/>
+                    </LineChart>
+                </>}
             </div>
-        </main>
+            <div className='side-content'>
+                <h3>Purchase Granny Smith stock</h3>
+                <p>Current price is: {data.slice(-1).map((obj) => {
+                    return obj.value.toFixed(2)
+                })}</p>
+                {loggedIn && <>
+                    <h3 className='userGreeting'>Hello {user}</h3>
+                    <p>Your balance is: {balance} </p>
+                </>
+                }
+                <div>
+                    <Link to={`Purchases`} className='link-button' id='buy'>Buy</Link>
+                    <Link to={`Sales`} className='link-button' id='sell'>Sell</Link>
+                    <Link to={`Deposits`} className='link-button' id='deposit'>Deposit</Link>
+                    <Link to={`Withdrawals`} className='link-button' id='withdraw'>Withdraw</Link>
+                </div>
+            </div>
+        </article>
     );
 };
 

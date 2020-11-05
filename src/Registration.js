@@ -33,26 +33,29 @@ export class Registration extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data),
-        });
+        })
         this.setState = {
-            data: {
-                email:"",
-                password:""
-            }
-        };
+                data: Object.assign({}, this.state.data, {
+                    [event.target.name]: null,
+                }),
+            };
     }
 
     render() {
         return (
-            <form id="contact-form" className="form" onSubmit={this.handleSubmit.bind(this)} method="POST">
-                <h3>Skapa användare</h3>
-                <label className="input-label">Emailadress</label>
-                <input type="email" className="input" name="email" value={this.state.data.email} onChange={this.handleTextareaChange}/>
-                <br/>
-                <label className="input-label">Lösenord</label>
-                <input type="password" className="input" autoComplete="current-password" name="password" value={this.state.data.password} onChange={this.handleTextareaChange}/>
-                <button type="submit" className="button">Submit</button>
-            </form>
+            <article className="main">
+                <form id="contact-form" className="form" onSubmit={this.handleSubmit.bind(this)} method="POST">
+                    <h3 className="centre-text">Create user account</h3>
+                    <label className="input-label">Email address</label>
+                    <input type="email" className="input" id="longerinput" name="email" value={this.state.data.email}
+                           onChange={this.handleTextareaChange}/>
+                    <br/>
+                    <label className="input-label" >Password</label>
+                    <input type="password" className="input" id="longerinput" autoComplete="current-password" name="password"
+                           value={this.state.data.password} onChange={this.handleTextareaChange}/>
+                    <button type="submit" className="button">Submit</button>
+                </form>
+            </article>
         );
     }
 }

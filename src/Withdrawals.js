@@ -1,66 +1,86 @@
-import React, {Component} from "react";
+import React, {useState, useEffect} from "react";
 import {baseUrl} from "./Base";
+import Price from "./Price";
+import "./style/App.css"
+
+
 const loggedInUser = localStorage.getItem('id');
 
-export class Withdrawals extends Component {
-    constructor(props) {
-        super(props);
+let money = '';
 
-        this.state = {
-            data: {
-                userid: loggedInUser,
-                type: 'Withdrawal',
-                amount:'',
-            },
-        };
+export function Withdrawals() {
 
-        this.handleTextareaChange = this.handleTextareaChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-    }
-
-    handleTextareaChange(event) {
-        this.setState({
-            data: Object.assign({}, this.state.data, {
-                [event.target.name]: event.target.value,
-            }),
-        });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        const data = this.state.data;
-        console.log(data.userid)
-        console.log(data.type)
-        console.log(data.amount)
-        fetch( baseUrl() + `withdrawal`, {
+    function setItem(items) {
+        fetch(baseUrl() + `withdrawal`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data),
-        });
+            body: JSON.stringify({items}),
+        })
+            .then(data => data.json())
+            .then(balanceFetch)
+    }
+
+    // const objectData = Price()
+    // console.log(objectData);
+    const price = Price().slice(-1).map((obj) => {
+        return obj.value.toFixed(2)
+    })[0];
+    console.log(price);
+    const [itemInput, setItemInput] = useState('');
+    const [withdrawalComplete, setWithdrawalComplete] = useState(false)
+    const [balance, setBalance] = useState('');
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setItem({
+            userid: loggedInUser,
+            amount: itemInput,
+            type: 'Withdrawal'
+        })
+        money = itemInput;
+        setItemInput('');
+        setWithdrawalComplete(true)
+    };
+
+    useEffect(() => {
+        fetch(baseUrl() + `${loggedInUser}`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res.data[0])
+                setBalance(res.data[0].cash_balance)
+            });
+    }, []);
+
+    function balanceFetch() {
+        fetch(baseUrl() + `${loggedInUser}`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res.data[0])
+                setBalance(res.data[0].cash_balance)
+            });
     }
 
 
-    render() {
-        return (
-            <form className="form" onSubmit={this.handleSubmit}>
-                <label className= "input-label">
-                    Type of transaction:
-                    <textarea className= "input" name="type" readOnly={this.state.data.type}/>
-                </label>
-                <br/>
-                <label className= "input-label">
-                    Amount:
-                    <textarea className= "input" name="amount" value={(this.state.data.amount)} onChange={this.handleTextareaChange}/>
-                </label>
-                <input type="submit" value="Submit"/>
-            </form>
-        );
-    }
+    return (
+        <article className="main">
+            <div className="wrapper">
+                <h1>Withdraw money from your account</h1>
+
+                <form onSubmit={handleSubmit}>
+                    <label className='input-label'>
+                        <p className="centre-text">Amount to withdraw</p>
+                        <input className='input' type="text" onChange={event => setItemInput(event.target.value)} value={itemInput}/>
+                    </label>
+                    <button type="submit">Submit</button>
+                </form>
+                <div className="centre-text">{(withdrawalComplete && <p>You withdrew {money} money.</p>)}</div>
+                <p className="centre-text">Your balance is now {balance}</p>
+            </div>
+        </article>
+    )
 }
-
-
 
 export default Withdrawals;

@@ -1,8 +1,11 @@
 import React, {useState} from "react";
 import {baseUrl} from "./Base";
 import Price from "./Price";
+import "./style/App.css"
+
 
 const loggedInUser = localStorage.getItem('id');
+let units = 0;
 
 export function Purchases() {
 
@@ -18,13 +21,13 @@ export function Purchases() {
             .then(data => data.json())
     }
 
-    const objectData = Price()
-    console.log(objectData);
-    const price = objectData.slice(-1).map((obj) => {
+
+    const price = Price().slice(-1).map((obj) => {
         return obj.value.toFixed(2)
     })[0];
     console.log(price);
-    const [itemInput, setItemInput] = useState('');
+    const [itemInput, setItemInput] = useState(0);
+    const [purchasePrice, setPurchasePrice] = useState(false)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,23 +38,28 @@ export function Purchases() {
             unit_price: price,
             type: 'Purchase'
         })
+        units = itemInput;
         console.log(itemInput)
         setItemInput("");
+        setPurchasePrice(true)
     };
 
-    return (
-        <div className="wrapper">
-            <h1>Buy Apples</h1>
 
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Amount of apples</p>
-                    <input type="text" onChange={event => setItemInput(event.target.value)} value={itemInput}/>
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-            <p>You bought {itemInput} for {price} money per unit at a total of {parseInt(itemInput) * price}</p>
-        </div>
+    return (
+        <article className="main">
+            <div>
+                <h1>Buy Apples</h1>
+                <form onSubmit={handleSubmit}>
+                    <label className='input-label'>
+                        <p className="centre-text">Amount of apples</p>
+                        <input className='input' type="text" onChange={event => setItemInput(event.target.value)} value={itemInput}/>
+                    </label>
+                    <button type="submit">Submit</button>
+                </form>
+                <div className="centre-text">{(purchasePrice && <p>You sold {units} apples for {price} money per unit at a total
+                    of {(units * price).toFixed(2)}</p>)}</div>
+            </div>
+        </article>
     )
 }
 

@@ -1,65 +1,81 @@
-import React, {Component} from "react";
+import React, {useState, useEffect} from "react";
 import {baseUrl} from "./Base";
+import "./style/App.css";
+import "./style/Form.css";
+
 const loggedInUser = localStorage.getItem('id');
 
-export class Deposit extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            data: {
-                userid: loggedInUser,
-                type: 'Deposit',
-                amount:'',
-            },
-        };
+let money = '';
 
-        this.handleTextareaChange = this.handleTextareaChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+export function Deposits() {
 
-    }
-
-    handleTextareaChange(event) {
-        this.setState({
-            data: Object.assign({}, this.state.data, {
-                [event.target.name]: event.target.value,
-            }),
-        });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        const data = this.state.data;
-        console.log(data.userid)
-        console.log(data.type)
-        console.log(data.amount)
-        fetch( baseUrl() + `deposit`, {
+    function setItem(items) {
+        console.log(items)
+        fetch(baseUrl() + `deposit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data),
-        });
+            body: JSON.stringify({items}),
+        })
+            .then(data => data.json())
+            .then(balanceFetch);
     }
 
+    const [itemInput, setItemInput] = useState('');
+    const [withdrawalComplete, setWithdrawalComplete] = useState(false)
+    const [balance, setBalance] = useState('');
 
-    render() {
-        return (
-            <form className="form" onSubmit={this.handleSubmit}>
-                <label className= "input-label">
-                    Type of transaction:
-                    <textarea className= "input" name="type" value={this.state.data.type}/>
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setItem({
+            userid: loggedInUser,
+            amount: itemInput,
+            type: 'Deposit'
+        })
+        money = itemInput;
+        setItemInput('');
+        setWithdrawalComplete(true)
+    };
+
+    function balanceFetch() {
+        fetch(baseUrl() + `${loggedInUser}`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res.data[0])
+                setBalance(res.data[0].cash_balance)
+            });
+    }
+
+    useEffect(() => {
+        fetch(baseUrl() + `${loggedInUser}`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res.data[0])
+                setBalance(res.data[0].cash_balance)
+            });
+    }, []);
+
+
+    return (
+        <article className="main">
+        <div>
+            <h1>Deposit money to your account</h1>
+
+            <form onSubmit={handleSubmit}>
+                <label className='input-label'>
+                    <p className='centre-text'>Amount to deposit</p>
+                    <input className='input' type="text" onChange={event => setItemInput(event.target.value)} value={itemInput}/>
                 </label>
-                <br/>
-                <label className= "input-label">
-                    Amount:
-                    <textarea className= "input" name="amount" value={this.state.data.amount} onChange={this.handleTextareaChange}/>
-                </label>
-                <input type="submit" value="Submit"/>
+                <button type="submit">Submit</button>
             </form>
-        );
-    }
+            <div className='centre-text'>{(withdrawalComplete && <p>You deposited {money} money.</p>)}</div>
+            <p className='centre-text'>Your balance is now { balance }</p>
+        </div>
+        </article>
+    )
 }
 
-
-export default Deposit;
+export default Deposits;

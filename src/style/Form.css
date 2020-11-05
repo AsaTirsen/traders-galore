@@ -1,0 +1,66 @@
+
+.form {
+    width: 80%;
+    padding-left: 10%;
+}
+
+
+.input {
+    line-height: 2em;
+    min-height: 2em;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+    padding: 0.6rem 0.6rem;
+    box-sizing: border-box;
+    width: 50%;
+    margin-bottom: 1.4rem;
+//white-space: pre-line;
+}
+
+.input#longerinput {
+    width: 100%
+}
+
+.input:valid {
+    border: 1px solid green;
+}
+
+.input:invalid {
+    border: 1px solid red;
+}
+
+@media (max-width: 667px) {
+    .input {
+        width: 50%;
+        margin: 0 auto;
+    }
+    .form {
+        width: 100%;
+        padding-left: 0;
+    }
+}
+
+.input-label {
+    font-weight: bold;
+    margin: 2rem 0 0 0;
+    display: block;
+    width: 100%;
+    white-space: pre-line;
+}
+
+.input-label:first-of-type {
+    margin: 1rem 0 0 0;
+}
+
+button {
+    margin: 3em 0 3em 25%;
+    width: 50%;
+    min-height: 2em;
+    background-color: yellowgreen ;
+    border-radius: 0.4rem;
+}
+
+.centre-text {
+    text-align: center;
+}
