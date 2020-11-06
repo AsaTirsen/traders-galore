@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {baseUrl} from "./Base";
 import Price from "./Price";
 import "./style/App.css"
+import { useHistory } from 'react-router-dom';
 
 const loggedInUser = localStorage.getItem('id');
 let units = '';
@@ -22,12 +23,13 @@ export function Sales() {
 
     // const objectData = Price()
     // console.log(objectData);
-    const price = Price().slice(-1).map((obj) => {
+    let price = Price().slice(-1).map((obj) => {
         return obj.value.toFixed(2)
     })[0];
     console.log(price);
     const [itemInput, setItemInput] = useState('');
     const [purchasePrice, setPurchasePrice] = useState(false)
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -40,8 +42,10 @@ export function Sales() {
         })
         console.log(itemInput)
         setItemInput('');
-        setPurchasePrice(true)
-    };
+        setPurchasePrice(true);
+        setTimeout(() => {
+            history.push('./');
+        }, 3000)    };
 
     return (
         <article className="main">

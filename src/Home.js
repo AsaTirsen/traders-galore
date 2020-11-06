@@ -10,7 +10,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import { useMediaQuery } from 'react-responsive'
+import { useMediaQuery } from 'react-responsive';
 
 
 const loggedIn = localStorage.getItem('token');
@@ -25,6 +25,20 @@ const Home = () => {
     const [user, setUser] = useState("");
     const isSmallerScreen = useMediaQuery({ query: '(max-width: 500px)' })
     const isBiggerScreen = useMediaQuery({ query: '(min-width: 501px)' })
+    // 1. listen for a price change event and update the state
+
+    useEffect(() => {
+        const socket = io('http://localhost:1343', {
+            transports: ['websocket', 'polling']
+        });
+        socket.on('stocks', grannySmith => {
+            console.log(grannySmith)
+            setData(currentData => [...currentData, grannySmith]);
+        });
+        return () => {
+            socket.close();
+        };
+    }, []);
 
     useEffect(() => {
         if (loggedIn) {
@@ -48,20 +62,6 @@ const Home = () => {
         }
     }, []);
 
-
-    // 1. listen for a price change event and update the state
-    useEffect(() => {
-        const socket = io('http://localhost:1342', {
-            transports: ['websocket', 'polling']
-        });
-        socket.on('stocks', grannySmith => {
-            console.log(grannySmith)
-            setData(currentData => [...currentData, grannySmith]);
-        });
-        return () => {
-            socket.close();
-        };
-    }, []);
 
     return (
         <article className='main'>
@@ -92,7 +92,7 @@ const Home = () => {
                 })}</p>
                 {loggedIn && <>
                     <h3 className='userGreeting'>Hello {user}</h3>
-                    <p>Your balance is: {balance} </p>
+                    <p>Your balance is: {balance ? balance.toFixed(2) : 0} </p>
                 </>
                 }
                 <div>

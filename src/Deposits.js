@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {baseUrl} from "./Base";
 import "./style/App.css";
 import "./style/Form.css";
+import { useHistory } from 'react-router-dom';
 
 const loggedInUser = localStorage.getItem('id');
 
@@ -26,6 +27,7 @@ export function Deposits() {
     const [itemInput, setItemInput] = useState('');
     const [withdrawalComplete, setWithdrawalComplete] = useState(false)
     const [balance, setBalance] = useState('');
+    const history = useHistory();
 
 
     const handleSubmit = (e) => {
@@ -38,6 +40,9 @@ export function Deposits() {
         money = itemInput;
         setItemInput('');
         setWithdrawalComplete(true)
+        setTimeout(() => {
+            history.push('./');
+        }, 3000)
     };
 
     function balanceFetch() {
@@ -72,7 +77,7 @@ export function Deposits() {
                 <button type="submit">Submit</button>
             </form>
             <div className='centre-text'>{(withdrawalComplete && <p>You deposited {money} money.</p>)}</div>
-            <p className='centre-text'>Your balance is now { balance }</p>
+            <p className='centre-text'>Your balance is now { parseFloat(balance).toFixed(2) }</p>
         </div>
         </article>
     )

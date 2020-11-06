@@ -5,7 +5,7 @@ export function Price(){
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        const socket = io('http://localhost:1342', {
+        const socket = io('http://localhost:1343', {
             transports: ['websocket', 'polling']
         });
         socket.on('stocks', grannySmith => {
