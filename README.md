@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### `Technical choices`
+The react framework was chosen as it is a widely used framework with lots of online resources to support the development process and a relatively low threshold for beginners. 
+For the graphical representation of the pricechange the package recharts was used. It is built on React components and was smooth to integrate. Recharts offers a great flexibility of ways to represent data change, even though one of it’s simpler forms was used in this exemple.
+For the menu the package react-burger-menu was used. This is a customisable product that was implemented here in its purest form. However, if this example product were to be developed further, this menu would be improved by functions to keep track of state-changes, so that the menu would close on a click. 
+In this app socket.io was used for the websocket. This choice was based partly on convenience as this is one of the most widely used websockets.
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -38,6 +44,10 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+
+### `npm run deploy`
+Deploys the build with a build and rsync script.
 
 ## Learn More
 

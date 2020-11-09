@@ -80,7 +80,10 @@ export function Withdrawals() {
                     <button type="submit">Submit</button>
                 </form>
                 <div className="centre-text">{(withdrawalComplete && <p>You withdrew {money} money.</p>)}</div>
-                <p className="centre-text">Your balance is now { parseFloat(balance).toFixed(2)}</p>
+                {loggedInUser && <>
+                    <p className="centre-text">Your balance is: {balance ? balance.toFixed(2) : 0} </p>
+                </>
+                }
             </div>
         </article>
     )

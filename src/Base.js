@@ -1,6 +1,6 @@
 function baseUrl() {
-    //return "https://me-api.asatirsen.me/";
-    return "http://localhost:1350/"
+    return "https://platform-server.asatirsen.me/";
+    //return "http://localhost:1350/"
 }
 
 export {baseUrl};

@@ -28,9 +28,14 @@ const Home = () => {
     // 1. listen for a price change event and update the state
 
     useEffect(() => {
-        const socket = io('http://localhost:1343', {
+        console.log("before socket")
+        const socket = io('https://trading-server.asatirsen.me', {
             transports: ['websocket', 'polling']
         });
+        console.log(socket);
+        // const socket = io('http://localhost:1343', { //try wss...
+        //     transports: ['websocket', 'polling']
+        // });
         socket.on('stocks', grannySmith => {
             console.log(grannySmith)
             setData(currentData => [...currentData, grannySmith]);
