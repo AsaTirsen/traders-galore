@@ -1,26 +1,26 @@
-import io from "socket.io-client";
 import {useEffect, useState} from 'react';
+import {w3cwebsocket as W3CWebSocket} from "websocket";
 
-export function Price(){
+const client = new W3CWebSocket('wss://trading-server.asatirsen.me');
+//const client = new W3CWebSocket('ws://127.0.0.1:1343');
+
+export function Price() {
     const [data, setData] = useState([]);
-
     useEffect(() => {
-        const socket = io('https://trading-server.asatirsen.me', {
-            transports: ['websocket']
-        });
-        console.log(socket);
-        // const socket = io('http://localhost:1343', { //try wss...
-        //     transports: ['websocket', 'polling']
-        // });
-        socket.on('stocks', grannySmith => {
-            console.log(grannySmith)
-            setData(currentData => [...currentData, grannySmith]);
-        });
-        return () => {
-            socket.close();
+        client.onopen = () => {
+            console.log("client open");
+        }
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log(dataFromServer.time);
+            console.log(dataFromServer.value);
+            setData(currentData => [...currentData, dataFromServer])
+            console.log(data);
         };
-    }, []);
+    }, );
     return data;
 }
+
+
 
 export default Price;

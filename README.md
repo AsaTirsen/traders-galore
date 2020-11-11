@@ -6,8 +6,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 The react framework was chosen as it is a widely used framework with lots of online resources to support the development process and a relatively low threshold for beginners. 
 For the graphical representation of the pricechange the package recharts was used. It is built on React components and was smooth to integrate. Recharts offers a great flexibility of ways to represent data change, even though one of it’s simpler forms was used in this exemple.
 For the menu the package react-burger-menu was used. This is a customisable product that was implemented here in its purest form. However, if this example product were to be developed further, this menu would be improved by functions to keep track of state-changes, so that the menu would close on a click. 
-In this app socket.io was used for the websocket. This choice was based partly on convenience as this is one of the most widely used websockets.
-
+In this app websocket was used for real-time data connection. This as the previous verison 
+built with socket.io caused production-related issues with the nginx server. 
 ## Available Scripts
 
 In the project directory, you can run:

@@ -6,7 +6,7 @@
 .main {
   margin: 0 auto;
   position: relative;
-  width: 70%;
+  width: 100%;
   background-color: #fbfbfb;
   min-height: 100%;
   padding-top: 8em;
@@ -25,6 +25,7 @@
   top: 20em;
   right: 10%;
   padding: 2em;
+  margin-left: 1em;
 }
 
 h1 {
@@ -33,7 +34,7 @@ h1 {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1350px) {
   .main {
     width: 100%;
     min-height: 100%;
