@@ -18,6 +18,7 @@ import {slide as Menu} from 'react-burger-menu'
 
 const loggedIn = localStorage.getItem('token');
 
+
 class App extends React.Component {
 
     render() {

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {baseUrl} from "./Base";
-import Price from "./Price";
+//import Price from "./Price";
 import "./style/App.css"
 import { useHistory } from 'react-router-dom';
 
@@ -21,11 +21,7 @@ export function Sales() {
             .then(data => data.json())
     }
 
-    // const objectData = Price()
-    // console.log(objectData);
-    let price = Price().slice(-1).map((obj) => {
-        return obj.value.toFixed(2)
-    })[0];
+    const price = parseFloat(localStorage.getItem("price"));
     console.log(price);
     const [itemInput, setItemInput] = useState('');
     const [purchasePrice, setPurchasePrice] = useState(false)
@@ -41,11 +37,13 @@ export function Sales() {
             type: 'Sale'
         })
         console.log(itemInput)
+        units = itemInput;
         setItemInput('');
         setPurchasePrice(true);
         setTimeout(() => {
             history.push('./');
-        }, 3000)    };
+        }, 5000)
+    };
 
     return (
         <article className="main">
@@ -59,7 +57,7 @@ export function Sales() {
                     </label>
                     <button type="submit">Submit</button>
                 </form>
-                <div>{(purchasePrice && <p>You bought {units} apples for {price} money per unit at a total
+                <div>{(purchasePrice && <p  className="centre-text">You sold {units} applestock for {price.toFixed(2)} money per unit at a total
                     of {(units * price).toFixed(2)}</p>)}
                 </div>
             </div>

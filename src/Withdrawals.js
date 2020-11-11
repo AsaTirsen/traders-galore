@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {baseUrl} from "./Base";
-import Price from "./Price";
+//import Price from "./Price";
 import "./style/App.css"
 import { useHistory } from 'react-router-dom';
 
@@ -22,12 +22,11 @@ export function Withdrawals() {
             .then(balanceFetch)
     }
 
-    // const objectData = Price()
-    // console.log(objectData);
-    const price = Price().slice(-1).map((obj) => {
-        return obj.value.toFixed(2)
-    })[0];
-    console.log(price);
+
+    // const price = Price().slice(-1).map((obj) => {
+    //     return obj.value.toFixed(2)
+    // })[0];
+    // console.log(price);
     const [itemInput, setItemInput] = useState('');
     const [withdrawalComplete, setWithdrawalComplete] = useState(false)
     const [balance, setBalance] = useState('');
